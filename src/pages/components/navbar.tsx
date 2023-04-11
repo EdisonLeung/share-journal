@@ -1,6 +1,13 @@
+import { DefaultSession, Session } from "next-auth";
+import { SignOutParams, SignOutResponse } from "next-auth/react";
+import { AppProps } from "next/app";
 import { ReactNode, useState } from "react";
 
-export default function NavBar(props: ReactNode) {
+interface Props {
+  data: Session | null,
+  signOut: () => any
+}
+export default function NavBar(pageProps: Props) {
   const [profile, setProfile] = useState(false);
   return (
     <>
@@ -36,7 +43,7 @@ export default function NavBar(props: ReactNode) {
 
               <div className="flex">
                 <div className="xl:flex md:mr-6 xl:mr-16 text-xl text-gray-700">
-                  Welcome, {props.user.name ?? ""}!
+                  Welcome, {pageProps.data?.user?.name}!
                 </div>{" "}
               </div>
               <div className="flex">
@@ -49,7 +56,7 @@ export default function NavBar(props: ReactNode) {
                       {profile && (
                         <ul className="p-2 w-40 border-r bg-white absolute rounded right-0 shadow top-0 mt-16 z-10">
                           <li className="cursor-pointer text-base text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none">
-                            <button onClick={props.signOut}>
+                            <button onClick={pageProps.signOut}>
                               <i className="fa fa-right-from-bracket"></i>
                               <span className="ml-2">Sign Out</span>
                             </button>
@@ -58,7 +65,7 @@ export default function NavBar(props: ReactNode) {
                       )}
                       <div className="cursor-pointer flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out">
                         <img
-                          src={props.user.image}
+                          src={pageProps.data?.user?.image as (string | undefined)}
                           className="rounded-full h-10 w-10 object-cover"
                           alt="profile photo"
                         />
