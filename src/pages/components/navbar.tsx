@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 
-export default function NavBar(props) {
+export default function NavBar(props: ReactNode) {
   const [profile, setProfile] = useState(false);
   return (
     <>
