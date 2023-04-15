@@ -158,7 +158,7 @@ export const Home: React.FC<Props> = (props) => {
       <div className="bg-gradient-to-r from-pink-500 to-yellow-500 bg-cover min-h-screen">
         <NavBar data={data} signOut={signOut} />
         <div className="flex justify-center p-2">
-          <div className="max-w-2xl">
+          <div className="max-w-full">
             <div className="flex flex-col outline outline-2 rounded-xl p-2 bg-white shadow-2xl">
               <div className="flex flex-row item items-center">
                 <picture>
@@ -273,9 +273,9 @@ export const Home: React.FC<Props> = (props) => {
                     <div className="text-ellipsis overflow-hidden">
                       <p className="font-semibold">Summary: </p>
                       <p>{item.content}</p>
-                      <div className="text-right text-gray-500">
+                      {item.author.name === data.user?.name && (<div className="text-right text-gray-500 hover:font-semibold">
                         <button>(edit)</button>
-                      </div>
+                      </div>)}
                     </div>
                   </div>
                 );
