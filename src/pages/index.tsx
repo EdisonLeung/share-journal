@@ -16,7 +16,7 @@ export const getStaticProps: GetStaticProps = async () => {
         select: { name: true, image: true },
       },
     },
-  }); 
+  });
   feed = JSON.parse(JSON.stringify(feed));
   return {
     props: { feed },
@@ -132,29 +132,33 @@ export const Home: React.FC<Props> = (props) => {
         body: JSON.stringify(body),
       });
       console.log(posts);
-      setPosts([...posts, {
-        author: {name: data.user?.name, image: data.user?.image },
-        authorId: "temp",
-        content: content,
-        mood: 3,
-        published: true
-      }])
-      router.replace(router.asPath);
+      setPosts([
+        ...posts,
+        {
+          author: { name: data.user?.name, image: data.user?.image },
+          authorId: "temp",
+          content: content,
+          mood: 3,
+          published: true,
+          createdAt: new Date(),
+        },
+      ]);
+      // router.replace(router.asPath);
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     setPosts(props.feed);
-  }, [props.feed])
+  }, [props.feed]);
   if (status === "loading") return <h1> loading... please wait</h1>;
   if (status === "authenticated") {
     return (
       <div className="bg-gradient-to-r from-pink-500 to-yellow-500 bg-cover min-h-screen">
         <NavBar data={data} signOut={signOut} />
-        <div className="grid grid-cols-3">
-          <div className="col-start-2">
+        <div className="flex justify-center p-2">
+          <div className="max-w-2xl">
             <div className="flex flex-col outline outline-2 rounded-xl p-2 bg-white shadow-2xl">
               <div className="flex flex-row item items-center">
                 <picture>
@@ -168,31 +172,41 @@ export const Home: React.FC<Props> = (props) => {
                   <h1 className="ml-4 font-semibold">Rate You Day: </h1>
                   <div className="ml-4 flex">
                     <button
-                      className={`rounded-full h-10 w-10 m-1 ${mood == 1 ? "ring-4 ring-cyan-500" : ""} focus:outline-none focus:ring-4 focus:ring-cyan-500`}
+                      className={`rounded-full h-10 w-10 m-1 ${
+                        mood == 1 ? "ring-4 ring-cyan-500" : ""
+                      } focus:outline-none focus:ring-4 focus:ring-cyan-500`}
                       onClick={() => setMood(1)}
                     >
                       {MOODS[1].svg}
                     </button>
                     <button
-                      className={`rounded-full h-10 w-10 m-1 ${mood == 2 ? "ring-4 ring-cyan-500" : ""} focus:outline-none focus:ring-4 focus:ring-cyan-500`}
+                      className={`rounded-full h-10 w-10 m-1 ${
+                        mood == 2 ? "ring-4 ring-cyan-500" : ""
+                      } focus:outline-none focus:ring-4 focus:ring-cyan-500`}
                       onClick={() => setMood(2)}
                     >
                       {MOODS[2].svg}
                     </button>
                     <button
-                      className={`rounded-full h-10 w-10 m-1 ${mood == 3 ? "ring-4 ring-cyan-500" : ""} focus:outline-none focus:ring-4 focus:ring-cyan-500`}
+                      className={`rounded-full h-10 w-10 m-1 ${
+                        mood == 3 ? "ring-4 ring-cyan-500" : ""
+                      } focus:outline-none focus:ring-4 focus:ring-cyan-500`}
                       onClick={() => setMood(3)}
                     >
                       {MOODS[3].svg}
                     </button>
                     <button
-                      className={`rounded-full h-10 w-10 m-1 ${mood == 4 ? "ring-4 ring-cyan-500" : ""} focus:outline-none focus:ring-4 focus:ring-cyan-500`}
+                      className={`rounded-full h-10 w-10 m-1 ${
+                        mood == 4 ? "ring-4 ring-cyan-500" : ""
+                      } focus:outline-none focus:ring-4 focus:ring-cyan-500`}
                       onClick={() => setMood(4)}
                     >
                       {MOODS[4].svg}
                     </button>
                     <button
-                      className={`rounded-full h-10 w-10 m-1 ${mood == 5 ? "ring-4 ring-cyan-500" : ""} focus:outline-none focus:ring-4 focus:ring-cyan-500`}
+                      className={`rounded-full h-10 w-10 m-1 ${
+                        mood == 5 ? "ring-4 ring-cyan-500" : ""
+                      } focus:outline-none focus:ring-4 focus:ring-cyan-500`}
                       onClick={() => setMood(5)}
                     >
                       {MOODS[5].svg}
@@ -249,14 +263,20 @@ export const Home: React.FC<Props> = (props) => {
                         className="rounded-full w-full flex flex-col items-center ml-2"
                         onClick={() => console.log(item)}
                       >
-                        <h1 className=" font-semibold">{item.author.name} had a {MOODS[item.mood].text} day</h1>
+                        <h1 className=" font-semibold">
+                          {item.author.name} had a {MOODS[item.mood].text} day
+                        </h1>
                         <h1>{new Date(item.createdAt).toDateString()}</h1>
                       </div>
-                      <div className="w-12 h-12">
-                      {MOODS[item.mood].svg}
+                      <div className="w-12 h-12">{MOODS[item.mood].svg}</div>
+                    </div>
+                    <div className="text-ellipsis overflow-hidden">
+                      <p className="font-semibold">Summary: </p>
+                      <p>{item.content}</p>
+                      <div className="text-right text-gray-500">
+                        <button>(edit)</button>
                       </div>
                     </div>
-                    <div><h1 className="font-semibold">Summary: </h1>{item.content}</div>
                   </div>
                 );
               })
