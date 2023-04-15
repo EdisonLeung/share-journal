@@ -119,6 +119,7 @@ export const Home: React.FC<Props> = (props) => {
   const { data, status } = useSession();
   const [mood, setMood] = useState(3);
   const [content, setContent] = useState<string | undefined>();
+  const [posts, setPosts] = useState([]);
   const router = useRouter();
 
   const createPost = async (e: React.SyntheticEvent) => {
@@ -130,12 +131,23 @@ export const Home: React.FC<Props> = (props) => {
         headers: {},
         body: JSON.stringify(body),
       });
+      console.log(posts);
+      setPosts([...posts, {
+        author: {name: data.user?.name, image: data.user?.image },
+        authorId: "temp",
+        content: content,
+        mood: 3,
+        published: true
+      }])
       router.replace(router.asPath);
     } catch (error) {
       console.log(error);
     }
   };
 
+  useEffect(()=>{
+    setPosts(props.feed);
+  }, [props.feed])
   if (status === "loading") return <h1> loading... please wait</h1>;
   if (status === "authenticated") {
     return (
@@ -181,7 +193,7 @@ export const Home: React.FC<Props> = (props) => {
                     </button>
                     <button
                       className={`rounded-full h-10 w-10 m-1 ${mood == 5 ? "ring-4 ring-cyan-500" : ""} focus:outline-none focus:ring-4 focus:ring-cyan-500`}
-                      onClick={() => {setMood(5); console.log(props.feed)}}
+                      onClick={() => setMood(5)}
                     >
                       {MOODS[5].svg}
                     </button>
@@ -218,7 +230,7 @@ export const Home: React.FC<Props> = (props) => {
             </div>
 
             <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
-            {props.feed
+            {posts
               .map((item, index) => {
                 return (
                   <div
