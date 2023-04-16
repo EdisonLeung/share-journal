@@ -7,6 +7,9 @@ const inter = Inter({ subsets: ["latin"] });
 import prisma from "../../lib/prisma";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
+import EditModal from "./components/EditModal";
+import { isMobile } from "react-device-detect";
+import { Post } from "./components/Post";
 
 export const getStaticProps: GetStaticProps = async () => {
   let feed = await prisma.post.findMany({
@@ -27,7 +30,7 @@ export const getStaticProps: GetStaticProps = async () => {
 type Props = {
   feed: any[];
 };
-const MOODS = {
+export const MOODS = {
   1: {
     text: "very bad",
     svg: (
@@ -120,6 +123,7 @@ export const Home: React.FC<Props> = (props) => {
   const [mood, setMood] = useState(3);
   const [content, setContent] = useState<string | undefined>();
   const [posts, setPosts] = useState([]);
+  const [isModalOpen, setModalOpen] = useState(false)
   const router = useRouter();
 
   const createPost = async (e: React.SyntheticEvent) => {
@@ -138,7 +142,7 @@ export const Home: React.FC<Props> = (props) => {
           author: { name: data.user?.name, image: data.user?.image },
           authorId: "temp",
           content: content,
-          mood: 3,
+          mood: mood,
           published: true,
           createdAt: new Date(),
         },
@@ -158,8 +162,8 @@ export const Home: React.FC<Props> = (props) => {
       <div className="bg-gradient-to-r from-pink-500 to-yellow-500 bg-cover min-h-screen">
         <NavBar data={data} signOut={signOut} />
         <div className="flex justify-center p-2">
-          <div className="max-w-full">
-            <div className="flex flex-col outline outline-2 rounded-xl p-2 bg-white shadow-2xl">
+          <div className={`${isMobile? "max-w-full" : "max-w-3xl"}`}>
+            <div className="flex flex-col rounded-xl outline outline-2 p-2 bg-white shadow-2xl">
               <div className="flex flex-row item items-center">
                 <picture>
                   <img
@@ -247,37 +251,7 @@ export const Home: React.FC<Props> = (props) => {
             {posts
               .map((item, index) => {
                 return (
-                  <div
-                    key={index}
-                    className="flex flex-col outline outline-2 rounded-xl p-2 bg-white shadow-2xl mb-4"
-                  >
-                    <div className="flex flex-row item items-center">
-                      <picture>
-                        <img
-                          src={item.author.image as string | undefined}
-                          className="rounded-full h-12 w-14 object-cover"
-                          alt="profile photo"
-                        />
-                      </picture>
-                      <div
-                        className="rounded-full w-full flex flex-col items-center ml-2"
-                        onClick={() => console.log(item)}
-                      >
-                        <h1 className=" font-semibold">
-                          {item.author.name} had a {MOODS[item.mood].text} day
-                        </h1>
-                        <h1>{new Date(item.createdAt).toDateString()}</h1>
-                      </div>
-                      <div className="w-12 h-12">{MOODS[item.mood].svg}</div>
-                    </div>
-                    <div className="text-ellipsis overflow-hidden">
-                      <p className="font-semibold">Summary: </p>
-                      <p>{item.content}</p>
-                      {item.author.name === data.user?.name && (<div className="text-right text-gray-500 hover:font-semibold">
-                        <button>(edit)</button>
-                      </div>)}
-                    </div>
-                  </div>
+                  <Post key={index} item={item} data={data}/>
                 );
               })
               .reverse()}
