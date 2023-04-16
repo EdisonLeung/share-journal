@@ -1,6 +1,6 @@
 import { Transition, Dialog } from "@headlessui/react";
 import { Fragment, useState } from "react";
-import { MOODS } from "..";
+import { MOODS } from "../pages";
 import { Router, useRouter } from "next/router";
 
 export default function EditModal(props) {

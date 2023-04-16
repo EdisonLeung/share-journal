@@ -1,15 +1,15 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
-import NavBar from "./components/navbar";
+import NavBar from "../components/navbar";
 import React, { useEffect, useState } from "react";
 const inter = Inter({ subsets: ["latin"] });
 import prisma from "../../lib/prisma";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import EditModal from "./components/EditModal";
+import EditModal from "../components/EditModal";
 import { isMobile } from "react-device-detect";
-import { Post } from "./components/Post";
+import { Post } from "../components/Post";
 
 export const getStaticProps: GetStaticProps = async () => {
   let feed = await prisma.post.findMany({

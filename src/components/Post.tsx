@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MOODS } from "..";
+import { MOODS } from "../pages";
 import EditModal from "./EditModal";
 
 export const Post = (props) => {
