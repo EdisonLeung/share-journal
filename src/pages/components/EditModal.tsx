@@ -3,12 +3,13 @@ import { Fragment, useState } from "react";
 import { MOODS } from "..";
 import { Router, useRouter } from "next/router";
 
-export default function EditModal({ isOpen, setIsOpen, post }) {
+export default function EditModal(props) {
+    const post = props.post
   const [mood, setMood] = useState(post.mood);
   const [content, setContent] = useState<string | undefined>(post.content);
   const router = useRouter();
   function closeModal() {
-    setIsOpen(false);
+    props.setIsOpen(false);
   }
 
   async function updatePost(
@@ -25,7 +26,7 @@ export default function EditModal({ isOpen, setIsOpen, post }) {
     closeModal();
   }
   return (
-    <Transition appear show={isOpen} as={Fragment}>
+    <Transition appear show={props.isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-40" onClose={closeModal}>
         <Transition.Child
           as={Fragment}

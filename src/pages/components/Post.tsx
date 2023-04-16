@@ -11,7 +11,7 @@ export const Post = (props) => {
       <div className="flex flex-row item items-center">
         <picture>
           <img
-            src={item.author.image as string | undefined}
+            src={item.author?.image as string | undefined}
             className="rounded-full h-12 w-14 object-cover"
             alt="profile photo"
           />
@@ -21,7 +21,7 @@ export const Post = (props) => {
           onClick={() => console.log(item)}
         >
           <h1 className=" font-semibold">
-            {item.author.name} had a {MOODS[item.mood].text} day
+            {item.author?.name} had a {MOODS[item.mood].text} day
           </h1>
           <h1>{new Date(item.createdAt).toDateString()}</h1>
         </div>
@@ -30,7 +30,7 @@ export const Post = (props) => {
       <div className="text-ellipsis overflow-hidden">
         <p className="font-semibold">Summary: </p>
         <p>{item.content}</p>
-        {item.author.name === data.user?.name && (
+        {item.author?.name === data.user?.name && (
           <div className="text-right text-gray-500 hover:font-semibold">
             <button
               onClick={() => {
