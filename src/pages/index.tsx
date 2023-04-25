@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import EditModal from "../components/EditModal";
 import { isMobile } from "react-device-detect";
 import { Post } from "../components/Post";
+import ReactPlayer from "react-player";
 
 export const getStaticProps: GetStaticProps = async () => {
   let feed = await prisma.post.findMany({
@@ -255,6 +256,16 @@ export const Home: React.FC<Props> = (props) => {
                 );
               })
               .reverse()}
+            <div>
+              <ReactPlayer url='https://www.youtube.com/watch?v=wWgIAphfn2U'
+              onEnded={()=>console.log("ENDED")}
+              config={{
+                youtube: {
+                  playerVars: { showinfo: 1, disablekb: 0, }
+                },
+              }}/>
+            </div>
+
           </div>
         </div>
       </div>
